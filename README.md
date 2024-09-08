@@ -1,12 +1,10 @@
-# 抖音评论爬虫脚本
+# 抖音评论爬虫监控脚本
 
-本脚本用于爬取指定抖音视频的评论及其回复，并将结果保存为CSV文件。
+本脚本用于爬取指定批量抖音视频的评论及其回复，将结果保存为CSV文件，并监控增量更新的评论。
 
-参考项目：https://github.com/ShilongLee/Crawler
+原项目：[alphaply/DouyinComments](https://github.com/alphaply/DouyinComments)
 
-抖音对这部分接口进行了加密，本项目直接参考该项目中处理params，headers的部分
-
-感谢ShilongLee!
+本项目在原项目基础上进行了修改，特别感谢alphaply。
 
 ## 环境要求
 
@@ -28,16 +26,13 @@ pip install httpx pandas PyExecJS
 
 ## 脚本运行
 
-请先编辑脚本中的cookie变量，将其替换为您自己的cookie。然后运行脚本
+请先到config.py文件中完成配置，详细配置说明请参考config，然后运行main.py文件：
 
-随后根据提示输入awesome_id即可！
-
-
+```bash
+python main.py
+```
 
 ## 输出
-脚本将在当前目录下生成两个CSV文件：
 
-- comments.csv：包含视频的所有评论信息。
-- replies.csv：包含所有评论的回复信息。
-
-每个文件中都会包含评论或回复的详细信息，如评论内容、点赞数、评论时间、用户昵称等。
+- data：包含所有评论及其回复的CSV文件，文件名为视频id_comments/replies.csv。增量更新在相应时间的文件夹中。
+- logs：日志文件，包含爬取过程中的信息，按日分割。
