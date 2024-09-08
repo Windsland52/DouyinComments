@@ -24,7 +24,6 @@ async def get_comments_async(client: httpx.AsyncClient, aweme_id: str, cursor: s
 
 
 async def fetch_all_comments_async(aweme_id: str) -> list[dict[str, Any]]:
-    # limits = httpx.Limits(max_connections=1, max_keepalive_connections=1)
     async with httpx.AsyncClient(timeout=600) as client:
         cursor = 0
         all_comments = []
@@ -74,7 +73,6 @@ async def fetch_replies_for_comment(client: httpx.AsyncClient, semaphore, commen
 
 async def fetch_all_replies_async(comments: list) -> list:
     all_replies = []
-    # limits = httpx.Limits(max_connections=1, max_keepalive_connections=1)
     async with httpx.AsyncClient(timeout=600) as client:
         semaphore = asyncio.Semaphore(10)  # 在这里创建信号量
         with tqdm(total=len(comments), desc="Fetching replies", unit="comment") as pbar:
@@ -88,7 +86,7 @@ async def fetch_all_replies_async(comments: list) -> list:
 def process_comments(comments: list[dict[str, Any]]) -> pd.DataFrame:
     data = [{
         "评论ID": c['cid'],
-        "评论内容": c['text'],
+        "评论内容": c['text'].replace("\n", "").replace("\r", ""),  # 去除换行符
         # "点赞数": c['digg_count'],
         "评论时间": datetime.fromtimestamp(c['create_time']).strftime('%Y-%m-%d %H:%M:%S'),
         "用户昵称": c['user']['nickname'],
@@ -104,7 +102,7 @@ def process_replies(replies: list[dict[str, Any]], comments: pd.DataFrame) -> pd
     data = [
         {
             "评论ID": c["cid"],
-            "评论内容": c["text"],
+            "评论内容": c["text"].replace("\n", "").replace("\r", ""),  # 去除换行符
             # "点赞数": c["digg_count"],
             "评论时间": datetime.fromtimestamp(c["create_time"]).strftime(
                 "%Y-%m-%d %H:%M:%S"
@@ -152,12 +150,11 @@ async def process_aweme_id(aweme_id):
     save(all_replies, replies_filename)
 
 
-async def main():
-    tasks = [process_aweme_id(aweme_id) for aweme_id in aweme_ids]
-    
-    await asyncio.gather(*tasks)
+def main():
+    for aweme_id in aweme_ids:
+        asyncio.run(process_aweme_id(aweme_id))
 
 # 运行 main 函数
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
     print('done!')
