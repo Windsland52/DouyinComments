@@ -4,3 +4,5 @@ __pycache__/
 
 comments_replies.db
 bad_comments.db
+
+comments.py
