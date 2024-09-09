@@ -4,7 +4,9 @@
 
 原项目：[alphaply/DouyinComments](https://github.com/alphaply/DouyinComments)
 
-本项目在原项目基础上进行了修改，特别感谢alphaply。
+参考项目：[NanmiCoder/MediaCrawler](https://github.com/NanmiCoder/MediaCrawler)
+
+本项目在原项目基础上进行了修改，特别感谢两位作者。
 
 ## 环境要求
 
