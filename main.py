@@ -37,7 +37,7 @@ def setup_logging(logs_dir: str):
     # Set up the root logger with the handler
     logging.getLogger().setLevel(logging.INFO)  # or logging.DEBUG
     logging.getLogger().addHandler(handler)
-
+    logging.getLogger('httpx').setLevel(logging.WARNING)
 
 def create_config_file():
     # Default configuration content
@@ -72,16 +72,16 @@ aweme_ids = [
     # Write the default configuration to config.py
     with open("config.py", "w", encoding="utf-8") as config_file:
         config_file.write(config_content)
-    print("config.py has been created and initialized with default values.")
+    logging.info("config.py has been created and initialized with default values.")
 
 
 def check_and_initialize_config():
     # Check if config.py exists
     if not os.path.exists("config.py"):
-        print("config.py not found. Creating and initializing it...")
+        logging.warning("config.py not found. Creating and initializing it...")
         create_config_file()
     else:
-        print("config.py found.")
+        logging.info("config.py found.")
 
 # get aweme_ids by creator_id
 async def get_creator_awesome_id(creator_id: str, count: int, cookie: str) -> list[dict]:
@@ -284,6 +284,7 @@ def main():
     import config
 
     setup_logging(config.logs_dir)
+    logging.info("Logging has been set up.")
 
     try:
         if config.query_type == "detail":
