@@ -1,3 +1,6 @@
 data/
+logs/
 __pycache__/
-dataop.py
+
+comments_replies.db
+bad_comments.db
