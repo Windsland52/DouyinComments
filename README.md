@@ -15,6 +15,7 @@
 - httpx
 - pandas
 - execjs
+- apscheduler（定时任务用，只在schedule.py中使用）
 - nodejs（重要）
 
 
@@ -23,7 +24,7 @@
 在运行脚本之前，请确保安装了所有必要的依赖,别忘记安装nodejs：
 
 ```bash
-pip install httpx pandas PyExecJS
+pip install httpx pandas PyExecJS apscheduler
 ```
 
 ## 脚本运行
@@ -38,3 +39,18 @@ python main.py
 
 - data：包含所有评论及其回复的CSV文件，文件名为视频id_comments/replies.csv。增量更新在相应时间的文件夹中。
 - logs：日志文件，包含爬取过程中的信息，按日分割。
+
+## 其它功能
+
+1. 定时任务：可以设置定时任务，每天自动爬取指定抖音视频的评论及其回复。
+
+```python
+# 按需修改schedule.py后执行
+python schedule.py
+```
+
+2. 评论记录：可单独存储标记的坏评论，用于日后分析。
+
+```python
+python comments.py
+```
