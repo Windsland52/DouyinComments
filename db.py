@@ -37,7 +37,12 @@ class crdb:
 
     # Function to process CSV files and handle errors
     def process_csv(self, file_path, table_name, video_id):
-        data = pd.read_csv(file_path)
+        try:
+            data = pd.read_csv(file_path)
+        except Exception as e:
+            logging.error(f"Error processing {file_path}: {e}")
+            return  # Stop if there is an error processing the fileS
+        
         data['视频ID'] = video_id  # Add video ID to each row
         
         # Remove any line breaks in the text fields
