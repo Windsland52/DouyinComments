@@ -108,6 +108,46 @@ class crdb:
 
         # Commit changes to the database
         self.conn.commit()
+    
+    # 通过评论ID查询评论内容
+    def get_comment_content(self, comment_id):
+        # 先查询 comments 表
+        self.cursor.execute("SELECT 评论内容 FROM comments WHERE 评论ID=?", (comment_id,))
+        result = self.cursor.fetchone()
+
+        # 如果 comments 表中存在该评论ID，直接返回结果
+        if result:
+            return result[0]
+
+        # 如果 comments 表中没有该评论ID，则查询 replies 表
+        self.cursor.execute("SELECT 评论内容 FROM replies WHERE 评论ID=?", (comment_id,))
+        result = self.cursor.fetchone()
+
+        # 如果 replies 表中存在该评论ID，返回结果，否则返回 None
+        if result:
+            return result[0]
+        else:
+            return None
+    
+    # 通过评论ID查询视频ID
+    def get_video_id(self, comment_id):
+        # 先查询 comments 表
+        self.cursor.execute("SELECT 视频ID FROM comments WHERE 评论ID=?", (comment_id,))
+        result = self.cursor.fetchone()
+
+        # 如果 comments 表中存在该评论ID，直接返回结果
+        if result:
+            return result[0]
+
+        # 如果 comments 表中没有该评论ID，则查询 replies 表
+        self.cursor.execute("SELECT 视频ID FROM replies WHERE 评论ID=?", (comment_id,))
+        result = self.cursor.fetchone()
+
+        # 如果 replies 表中存在该评论ID，返回结果，否则返回 None
+        if result:
+            return result[0]
+        else:
+            return None
 
     def close(self):
         # Close the connection separately, to be called when finished
